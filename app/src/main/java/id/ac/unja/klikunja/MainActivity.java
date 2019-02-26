@@ -15,9 +15,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadFragment(new HomeFragment());
         BottomNavigationView bottomNavigationView = findViewById(R.id.bn_main);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        int intentFragment = 1;
+
+//        try {
+//            intentFragment = getIntent().getExtras().getInt("frgToLoad");
+//        } catch (Exception e) {
+//            intentFragment = 1;
+//        }
+
+        switch (intentFragment){
+            case 1:
+                loadFragment(new HomeFragment());
+                break;
+            case 2:
+                loadFragment(new NewsFragment());
+                break;
+            case 3:
+                loadFragment(new EventsFragment());
+                break;
+            case 4:
+                loadFragment(new InfoFragment());
+                break;
+        }
     }
 
     private boolean loadFragment(Fragment fragment){
