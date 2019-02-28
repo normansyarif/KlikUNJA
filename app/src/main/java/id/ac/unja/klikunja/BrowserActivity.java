@@ -22,7 +22,7 @@ public class BrowserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
 
-        mToolbar = findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.browser_toolbar);
         webView = findViewById(R.id.wv);
         progressBar = findViewById(R.id.progressBar);
 
