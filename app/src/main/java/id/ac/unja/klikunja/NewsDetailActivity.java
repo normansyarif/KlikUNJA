@@ -31,7 +31,8 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
     private LinearLayout titleAppbar;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private String mUrl, mImg, mTitle, mDate, mSource, mAuthor;
+    private String mUrl, mImg, mTitle, mDate,mAuthor;
+
 
 
     @Override
@@ -63,7 +64,6 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
         mImg = intent.getStringExtra("img");
         mTitle = intent.getStringExtra("title");
         mDate = intent.getStringExtra("date");
-        mSource = intent.getStringExtra("source");
         mAuthor = intent.getStringExtra("author");
 
         RequestOptions requestOptions = new RequestOptions();
@@ -75,26 +75,26 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(imageView);
 
-        appbar_title.setText(mSource);
-        appbar_subtitle.setText(mUrl);
+        appbar_title.setText("News");
+        appbar_subtitle.setText(mTitle);
         date.setText(Utils.DateFormat(mDate));
         title.setText(mTitle);
 
         String author;
         if (mAuthor != null){
-            author = " \u2022 " + mAuthor;
+            author = mAuthor;
         } else {
             author = "";
         }
 
-        time.setText(mSource + author + " \u2022 " + Utils.DateToTimeFormat(mDate));
+        time.setText(author + " \u2022 " + Utils.DateToTimeFormat(mDate));
 
         initWebView(mUrl);
 
     }
 
     private void initWebView(String url){
-        WebView webView = findViewById(R.id.webView);
+        final WebView webView = findViewById(R.id.webView);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
@@ -102,7 +102,34 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        webView.setWebViewClient(new WebViewClient());
+        webView.setVisibility(View.GONE);
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                webView.loadUrl("javascript:(function() { " +
+                        "document.getElementsByClassName('top-bar')[0].style.display='none'; " +
+                        "document.getElementsByClassName('container')[1].style.display='none'; " +
+                        "document.getElementsByClassName('vertical-space2')[0].style.display='none'; " +
+                        "document.getElementsByClassName('w-next-article')[0].style.display='none'; " +
+                        "document.getElementsByClassName('w-prev-article')[0].style.display='none'; " +
+                        "document.getElementsByClassName('sidebar')[0].style.display='none'; " +
+                        "document.getElementsByClassName('rec-posts')[0].style.display='none'; " +
+                        "document.getElementsByClassName('post-trait-w')[0].style.display='none'; " +
+                        "document.getElementsByClassName('au-avatar-box')[0].style.display='none'; " +
+                        "document.getElementsByClassName('postmetadata')[0].style.display='none'; " +
+                        "document.getElementById('header').style.display='none'; " +
+                        "document.getElementById('headline').style.display='none'; " +
+                        "document.getElementById('pre-footer').style.display='none'; " +
+                        "document.getElementById('footer').style.display='none'; " +
+                        "})()");
+
+                webView.setVisibility(View.VISIBLE);
+
+            }
+        });
+
         webView.loadUrl(url);
     }
 
@@ -139,7 +166,7 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.newsshareandbrowser_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     @Override

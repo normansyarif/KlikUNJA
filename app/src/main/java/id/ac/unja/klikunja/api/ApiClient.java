@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "https://newsapi.org/v2/";
+    public static final String BASE_URL = "http://www.unja.ac.id/";
     public static Retrofit retrofit;
 
     public static Retrofit getApiClient(){

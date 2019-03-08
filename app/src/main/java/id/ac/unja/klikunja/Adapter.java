@@ -23,15 +23,15 @@ import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
-import id.ac.unja.klikunja.models.Article;
+import id.ac.unja.klikunja.models.News;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
-    private List<Article> articles;
+    private List<News> articles;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
 
-    public Adapter(List<Article> articles, Context context) {
+    public Adapter(List<News> articles, Context context) {
         this.articles = articles;
         this.context = context;
     }
@@ -46,7 +46,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holders, int position) {
         final MyViewHolder holder = holders;
-        Article model = articles.get(position);
+        News model = articles.get(position);
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(Utils.getRandomDrawbleColor());
@@ -54,8 +54,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
         requestOptions.centerCrop();
 
+        String img;
+        try{
+            img = model.getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl();
+        }catch (Exception e) {
+            img = "";
+        }
+
         Glide.with(context)
-                .load(model.getUrlToImage())
+                .load(img)
                 .apply(requestOptions)
                 .listener(new RequestListener<Drawable>() {
                     @Override
@@ -73,12 +80,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.imageView);
 
-        holder.title.setText(model.getTitle());
-        holder.desc.setText(model.getDescription());
-        holder.source.setText(model.getSource().getName());
-        holder.time.setText(" \u2022 " + Utils.DateToTimeFormat(model.getPublishedAt()));
-        holder.published_at.setText(Utils.DateFormat(model.getPublishedAt()));
-        holder.author.setText(model.getAuthor());
+        String tempdetails =  model.getExcerpt().getRendered();
+        tempdetails = tempdetails.replace("<p>","");
+        tempdetails = tempdetails.replace("</p>","");
+        tempdetails = tempdetails.replace("[&hellip;]","");
+
+        holder.title.setText(model.getTitle().getRendered());
+        holder.desc.setText(Utils.splitDesc(tempdetails, 15) + " ...");
+        holder.source.setText(model.getEmbedded().getAuthor().get(0).getName());
+        holder.time.setText(" \u2022 " + Utils.DateToTimeFormat(model.getDate()));
+        holder.published_at.setText(Utils.DateFormat(model.getDate()));
+        holder.author.setText("");
 
     }
 

@@ -34,7 +34,7 @@ public class Utils {
         PrettyTime p = new PrettyTime(new Locale(getCountry()));
         String isTime = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
                     Locale.ENGLISH);
             Date date = sdf.parse(oldstringDate);
             isTime = p.format(date);
@@ -49,7 +49,7 @@ public class Utils {
         String newDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("E, d MMM yyyy", new Locale(getCountry()));
         try {
-            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(oldstringDate);
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(oldstringDate);
             newDate = dateFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -69,5 +69,16 @@ public class Utils {
         Locale locale = Locale.getDefault();
         String country = String.valueOf(locale.getLanguage());
         return country.toLowerCase();
+    }
+
+    public static String splitDesc(String string, int noOfWords){
+        String[] words = string.split(" ");
+        StringBuilder newString = new StringBuilder();
+
+        for (int i = 0; i < noOfWords; i++) {
+            newString.append(" ").append(words[i]);
+        }
+
+        return newString.toString().trim();
     }
 }

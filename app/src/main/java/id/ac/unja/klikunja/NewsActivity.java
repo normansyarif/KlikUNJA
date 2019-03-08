@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +29,6 @@ import java.util.List;
 
 import id.ac.unja.klikunja.api.ApiClient;
 import id.ac.unja.klikunja.api.ApiInterface;
-import id.ac.unja.klikunja.models.Article;
 import id.ac.unja.klikunja.models.News;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,10 +36,9 @@ import retrofit2.Response;
 
 public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String API_KEY = "30bcbecb97ff41e4bdc4b4086b073d85";
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Article> articles = new ArrayList<>();
+    private List<News> articles = new ArrayList<>();
     private Adapter adapter;
     private Toolbar newsToolbar;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -75,29 +74,25 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         swipeRefreshLayout.setRefreshing(true);
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-
-        String country = Utils.getCountry();
-        String language = Utils.getLanguage();
-
-        Call<News> call;
+        Call<List<News>> call;
 
         if(keyword.length() > 0) {
-            call = apiInterface.getNewsSearch(keyword, language, "publisedAt", API_KEY);
+            call = apiInterface.getPostSearch("193", "", keyword);
         }else{
-            call = apiInterface.getNews(country, API_KEY);
+            call = apiInterface.getPostInfo("193", "");
         }
 
-        call.enqueue(new Callback<News>() {
+        call.enqueue(new Callback<List<News>>() {
             @Override
-            public void onResponse(Call<News> call, Response<News> response) {
-                if(response.isSuccessful() && response.body().getArticle() != null) {
+            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
+                if(response.isSuccessful() && response.body() != null) {
 
                     if(articles.isEmpty()) {
                         articles.clear();
                     }
 
                     whatsNew.setVisibility(View.VISIBLE);
-                    articles = response.body().getArticle();
+                    articles = response.body();
                     adapter = new Adapter(articles, NewsActivity.this);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
@@ -105,6 +100,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                     swipeRefreshLayout.setRefreshing(false);
 
                 }else{
+
                     whatsNew.setVisibility(View.INVISIBLE);
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(NewsActivity.this, "No result!", Toast.LENGTH_SHORT).show();
@@ -112,7 +108,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
+            public void onFailure(Call<List<News>> call, Throwable t) {
                 whatsNew.setVisibility(View.INVISIBLE);
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -127,13 +123,22 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                 ImageView imageView = view.findViewById(R.id.img);
                 Intent intent = new Intent(NewsActivity.this, NewsDetailActivity.class);
 
-                Article article = articles.get(position);
-                intent.putExtra("url", article.getUrl());
-                intent.putExtra("title", article.getTitle());
-                intent.putExtra("img", article.getUrlToImage());
-                intent.putExtra("date", article.getPublishedAt());
-                intent.putExtra("source", article.getSource().getName());
-                intent.putExtra("author", article.getAuthor());
+
+
+                News article = articles.get(position);
+
+                String img;
+                try{
+                    img = article.getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl();
+                }catch (Exception e) {
+                    img = "";
+                }
+
+                intent.putExtra("url", article.getLink());
+                intent.putExtra("title", article.getTitle().getRendered());
+                intent.putExtra("img", img);
+                intent.putExtra("date", article.getDate());
+                intent.putExtra("author", article.getEmbedded().getAuthor().get(0).getName());
 
                 Pair<View, String> pair = Pair.create((View)imageView, ViewCompat.getTransitionName(imageView));
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
