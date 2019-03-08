@@ -137,4 +137,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
             onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
+
+    public void addItem(List<News> mArticles) {
+        for(News ar : mArticles) {
+            articles.add(ar);
+        }
+
+        notifyDataSetChanged();
+    }
 }

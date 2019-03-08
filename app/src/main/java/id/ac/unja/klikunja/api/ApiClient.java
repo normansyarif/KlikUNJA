@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "http://www.unja.ac.id/";
+    public static final String BASE_URL = "http://www.unja.ac.id/wp-json/wp/v2/";
     public static Retrofit retrofit;
 
     public static Retrofit getApiClient(){

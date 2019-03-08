@@ -8,16 +8,20 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
-    @GET("wp-json/wp/v2/posts")
+    @GET("posts")
     Call<List<News>> getPostInfo(
             @Query("categories") String categories,
-            @Query("_embed") String embed
+            @Query("_embed") String embed,
+            @Query("per_page") int per_page,
+            @Query("page") int page
     );
 
-    @GET("wp-json/wp/v2/posts")
+    @GET("posts")
     Call<List<News>> getPostSearch(
             @Query("categories") String categories,
             @Query("_embed") String embed,
-            @Query("search") String keyword
+            @Query("search") String keyword,
+            @Query("per_page") int per_page,
+            @Query("page") int page
     );
 }

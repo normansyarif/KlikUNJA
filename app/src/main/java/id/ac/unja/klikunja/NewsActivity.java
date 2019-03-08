@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
@@ -20,7 +21,6 @@ import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -37,26 +37,30 @@ import retrofit2.Response;
 public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private List<News> articles = new ArrayList<>();
+    private LinearLayoutManager layoutManager;
+    private List<News> allArticles = new ArrayList<>();
     private Adapter adapter;
     private Toolbar newsToolbar;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private TextView whatsNew;
+    private SearchView searchView;
+
+    // Pagination variables
+    private int pageNumber = 1;
+    private int perPage = 9;
+    private boolean isLoading = true;
+    private int pastVisibleItems, visibleItemCount, totalItemCount, previousTotal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
-        whatsNew = findViewById(R.id.text_whatsnew);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         newsToolbar = findViewById(R.id.news_toolbar);
         recyclerView = findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(NewsActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setNestedScrollingEnabled(false);
 
         setSupportActionBar(newsToolbar);
         getSupportActionBar().setTitle("News");
@@ -64,9 +68,8 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
-        whatsNew.setVisibility(View.INVISIBLE);
-
         onLoadingSwipeRefresh("");
+        initScrollRecycler();
     }
 
     public void loadJson(final String keyword) {
@@ -77,9 +80,9 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         Call<List<News>> call;
 
         if(keyword.length() > 0) {
-            call = apiInterface.getPostSearch("193", "", keyword);
+            call = apiInterface.getPostSearch("193", "", keyword, perPage, pageNumber);
         }else{
-            call = apiInterface.getPostInfo("193", "");
+            call = apiInterface.getPostInfo("193", "", perPage, pageNumber);
         }
 
         call.enqueue(new Callback<List<News>>() {
@@ -87,21 +90,14 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
                 if(response.isSuccessful() && response.body() != null) {
 
-                    if(articles.isEmpty()) {
-                        articles.clear();
-                    }
-
-                    whatsNew.setVisibility(View.VISIBLE);
-                    articles = response.body();
-                    adapter = new Adapter(articles, NewsActivity.this);
+                    List<News> articles = response.body();
+                    allArticles = articles;
+                    adapter = new Adapter(allArticles, NewsActivity.this);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     initListener();
                     swipeRefreshLayout.setRefreshing(false);
-
                 }else{
-
-                    whatsNew.setVisibility(View.INVISIBLE);
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(NewsActivity.this, "No result!", Toast.LENGTH_SHORT).show();
                 }
@@ -109,11 +105,77 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public void onFailure(Call<List<News>> call, Throwable t) {
-                whatsNew.setVisibility(View.INVISIBLE);
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
+    }
+
+    private void initScrollRecycler() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+
+                if(dy > 0) {
+                    if(isLoading) {
+                        if(totalItemCount > previousTotal) {
+                            isLoading = false;
+                            previousTotal = totalItemCount;
+                        }
+                    }
+
+                    if(!isLoading && (totalItemCount-visibleItemCount) <= pastVisibleItems) {
+                        pageNumber++;
+                        performPagination();
+                        isLoading = true;
+                    }
+                }
+            }
+        });
+    }
+
+    private void performPagination() {
+
+        Toast.makeText(this, "Loading more news...", Toast.LENGTH_SHORT).show();
+
+        swipeRefreshLayout.setRefreshing(true);
+
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<News>> call;
+
+        if(!searchView.isIconified()) {
+            call = apiInterface.getPostSearch("193", "", searchView.getQuery().toString(), perPage, pageNumber);
+        }else{
+            call = apiInterface.getPostInfo("193", "", perPage, pageNumber);
+        }
+
+        call.enqueue(new Callback<List<News>>() {
+            @Override
+            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+
+                    List<News> articles = response.body();
+                    allArticles.addAll(articles);
+                    adapter.addItem(articles);
+                    initListener();
+                    swipeRefreshLayout.setRefreshing(false);
+
+                }else{
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(NewsActivity.this, "No result!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<News>> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void initListener() {
@@ -123,9 +185,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                 ImageView imageView = view.findViewById(R.id.img);
                 Intent intent = new Intent(NewsActivity.this, NewsDetailActivity.class);
 
-
-
-                News article = articles.get(position);
+                News article = allArticles.get(position);
 
                 String img;
                 try{
@@ -159,7 +219,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.newssearch_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search news...");
@@ -187,6 +247,9 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
+        searchView.setQuery("", false);
+        searchView.setIconified(true);
+        pageNumber = 1;
         loadJson("");
     }
 
