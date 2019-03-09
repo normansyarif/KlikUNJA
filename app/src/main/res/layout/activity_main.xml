@@ -23,5 +23,4 @@
         app:itemTextColor="@drawable/state_bnv"
         app:menu="@menu/bottomnavigation_menu" />
 
-
 </RelativeLayout>

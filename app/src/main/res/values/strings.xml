@@ -3,6 +3,6 @@
 
     <string name="home">Home</string>
     <string name="search">News</string>
-    <string name="favorite">Agenda</string>
-    <string name="account">Info</string>
+    <string name="events">Events</string>
+    <string name="opini">Opini</string>
 </resources>

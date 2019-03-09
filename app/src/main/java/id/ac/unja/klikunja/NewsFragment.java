@@ -3,6 +3,8 @@ package id.ac.unja.klikunja;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,8 +26,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -48,6 +53,10 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeRefreshLayout swipeRefreshLayout;
     private SearchView searchView;
     private ProgressBar paginationProgress;
+    private RelativeLayout errorLayout;
+    private ImageView errorImage;
+    private TextView errorTitle, errorMessage;
+    private Button btnRetry;
 
     // Pagination variables
     private int pageNumber = 1;
@@ -72,6 +81,11 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         recyclerView = view.findViewById(R.id.recyclerView);
         paginationProgress = view.findViewById(R.id.pagination_progress);
+        errorLayout = view.findViewById(R.id.errorLayout);
+        errorImage = view.findViewById(R.id.errorImage);
+        errorTitle = view.findViewById(R.id.errorTitle);
+        errorMessage = view.findViewById(R.id.errorMessage);
+        btnRetry = view.findViewById(R.id.btnRetry);
 
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -83,8 +97,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
-        onLoadingSwipeRefresh("");
-        initScrollRecycler();
+        initContent();
     }
 
     private void resetPagination() {
@@ -280,5 +293,45 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 loadJson(keyword);
             }
         });
+    }
+
+
+    private void showErrorMessage(int imageView, String title, String message) {
+        if(errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+
+        errorImage.setImageResource(imageView);
+        errorTitle.setText(title);
+        errorMessage.setText(message);
+
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initContent();
+            }
+        });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private void initContent() {
+        if(isNetworkAvailable()) {
+            if(errorLayout.getVisibility() == View.VISIBLE) {
+                errorLayout.setVisibility(View.GONE);
+            }
+
+            onLoadingSwipeRefresh("");
+            initScrollRecycler();
+        }else{
+            showErrorMessage(
+                    R.drawable.oops,
+                    "Network Error",
+                    "Umm.. You need the Internet for this");
+        }
     }
 }

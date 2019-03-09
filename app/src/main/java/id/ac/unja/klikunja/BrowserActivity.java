@@ -1,6 +1,9 @@
 package id.ac.unja.klikunja;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,12 +13,21 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class BrowserActivity extends AppCompatActivity {
     Toolbar mToolbar;
     WebView webView;
     ProgressBar progressBar;
+    private RelativeLayout errorLayout;
+    private ImageView errorImage;
+    private TextView errorTitle, errorMessage;
+    private Button btnRetry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +37,11 @@ public class BrowserActivity extends AppCompatActivity {
         mToolbar = findViewById(R.id.browser_toolbar);
         webView = findViewById(R.id.wv);
         progressBar = findViewById(R.id.progressBar);
+        errorLayout = findViewById(R.id.errorLayout);
+        errorImage = findViewById(R.id.errorImage);
+        errorTitle = findViewById(R.id.errorTitle);
+        errorMessage = findViewById(R.id.errorMessage);
+        btnRetry = findViewById(R.id.btnRetry);
 
         progressBar.setIndeterminate(false);
         setSupportActionBar(mToolbar);
@@ -34,37 +51,45 @@ public class BrowserActivity extends AppCompatActivity {
         String category = getIntent().getExtras().getString("category");
 
         if(category != null) {
+
+            String name = null;
+            String url = null;
+
             switch (category) {
                 case "survey":
-                    getSupportActionBar().setTitle("Survey");
-                    webViewHander("https://angket.unja.ac.id");
+                    name = "Survey";
+                    url = "https://angket.unja.ac.id";
                     break;
 
                 case "repo":
-                    getSupportActionBar().setTitle("Repository");
-                    webViewHander("https://repository.unja.ac.id");
+                    name = "Repository";
+                    url = "https://repository.unja.ac.id";
                     break;
 
                 case "borang":
-                    getSupportActionBar().setTitle("Borang");
-                    webViewHander("https://borang.unja.ac.id");
+                    name = "Borang";
+                    url = "https://borang.unja.ac.id";
                     break;
 
                 case "simpeg":
-                    getSupportActionBar().setTitle("SIMPEG");
-                    webViewHander("https://simpeg.unja.ac.id");
+                    name = "SIMPEG";
+                    url = "https://simpeg.unja.ac.id";
                     break;
 
                 case "dss":
-                    getSupportActionBar().setTitle("DSS");
-                    webViewHander("https://dss.unja.ac.id");
+                    name = "DSS";
+                    url = "https://dss.unja.ac.id";
                     break;
 
                 case "journal":
-                    getSupportActionBar().setTitle("Journal");
-                    webViewHander("https://online-journal.unja.ac.id");
+                    name = "Journal";
+                    url = "https://online-journal.unja.ac.id";
                     break;
             }
+
+            getSupportActionBar().setTitle(name);
+            init(url);
+
         }
 
     }
@@ -128,6 +153,48 @@ public class BrowserActivity extends AppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showErrorMessage(int imageView, String title, String message, final String url) {
+        if(errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+
+        errorImage.setImageResource(imageView);
+        errorTitle.setText(title);
+        errorMessage.setText(message);
+
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                init(url);
+            }
+        });
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    private void init(String url) {
+        if(isNetworkAvailable()) {
+            progressBar.setVisibility(View.VISIBLE);
+
+            if(errorLayout.getVisibility() == View.VISIBLE) {
+                errorLayout.setVisibility(View.GONE);
+            }
+
+            webViewHander(url);
+        }else{
+            progressBar.setVisibility(View.INVISIBLE);
+            showErrorMessage(
+                    R.drawable.oops,
+                    "Network Error",
+                    "Umm.. You need the Internet for that",
+                    url);
         }
     }
 }

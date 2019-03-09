@@ -13,12 +13,14 @@
         android:icon="@drawable/ic_news_bnv"/>
 
     <item
-        android:id="@+id/favorite_menu"
-        android:title="@string/favorite"
-        android:icon="@drawable/ic_events_bnv"/>
+        android:id="@+id/opini_menu"
+        android:title="@string/opini"
+        android:icon="@drawable/ic_opini_bnv"/>
+
     <item
-        android:id="@+id/account_menu"
-        android:title="@string/account"
-        android:icon="@drawable/ic_info_bnv"/>
+        android:id="@+id/events_menu"
+        android:title="@string/events"
+        android:icon="@drawable/ic_events_bnv"/>
+
 
 </menu>

@@ -13,6 +13,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary" />
 
+    <include layout="@layout/error" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
@@ -53,6 +55,7 @@
                 />
 
         </android.support.constraint.ConstraintLayout>
+
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

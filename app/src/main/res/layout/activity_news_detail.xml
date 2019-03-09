@@ -175,7 +175,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/cant_load_content"
+                        android:textAlignment="center"
+                        android:text="We need the Internet to load the content"
+                        android:paddingTop="25dp"
+                        android:paddingBottom="33dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                     <ProgressBar
+                        android:visibility="gone"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         android:id="@+id/progress_bar"
                         android:layout_marginTop="50dp"

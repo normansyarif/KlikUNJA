@@ -1,7 +1,9 @@
 package id.ac.unja.klikunja;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -81,4 +83,5 @@ public class Utils {
 
         return newString.toString().trim();
     }
+
 }

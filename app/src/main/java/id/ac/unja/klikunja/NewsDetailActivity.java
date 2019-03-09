@@ -1,6 +1,9 @@
 package id.ac.unja.klikunja;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,6 +18,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,13 +29,14 @@ import com.bumptech.glide.request.RequestOptions;
 public class NewsDetailActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     private ImageView imageView;
-    private TextView appbar_title, appbar_subtitle, date, time, title;
+    private TextView appbar_title, appbar_subtitle, date, time, title, contentError;
     private boolean isHideToolbarView = false;
     private FrameLayout date_behavior;
     private LinearLayout titleAppbar;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
     private String mUrl, mImg, mTitle, mDate,mAuthor;
+    private ProgressBar progressBar;
 
 
 
@@ -58,6 +63,8 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
         date = findViewById(R.id.date);
         time = findViewById(R.id.time);
         title = findViewById(R.id.title);
+        contentError = findViewById(R.id.cant_load_content);
+        progressBar = findViewById(R.id.progress_bar);
 
         Intent intent = getIntent();
         mUrl = intent.getStringExtra("url");
@@ -89,7 +96,13 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
 
         time.setText(author + " \u2022 " + Utils.DateToTimeFormat(mDate));
 
-        initWebView(mUrl);
+        if(isNetworkAvailable()) {
+            progressBar.setVisibility(View.VISIBLE);
+            initWebView(mUrl);
+        }else{
+            progressBar.setVisibility(View.GONE);
+            contentError.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -125,6 +138,7 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
                         "document.getElementById('footer').style.display='none'; " +
                         "})()");
 
+                progressBar.setVisibility(View.GONE);
                 webView.setVisibility(View.VISIBLE);
 
             }
@@ -192,5 +206,11 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 }
