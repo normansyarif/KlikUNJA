@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 loadFragment(new EventsFragment());
                 break;
             case 4:
-                loadFragment(new InfoFragment());
+                loadFragment(new OpiniFragment());
                 break;
         }
     }
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fragment = new EventsFragment();
                 break;
             case R.id.account_menu:
-                fragment = new InfoFragment();
+                fragment = new OpiniFragment();
                 break;
         }
         return loadFragment(fragment);

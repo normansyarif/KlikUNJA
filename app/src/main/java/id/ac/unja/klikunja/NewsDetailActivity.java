@@ -183,7 +183,7 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, mTitle);
-                String body = mTitle + "\n\n" + mUrl + "\n\n" + "Shared from KlikUNJA" + "\n";
+                String body = mTitle + "\n\n" + mUrl + "\n\n" + "Shared from KlikUNJA";
                 intent.putExtra(Intent.EXTRA_TEXT, body);
                 startActivity(Intent.createChooser(intent, "Share news"));
             }catch(Exception e) {
