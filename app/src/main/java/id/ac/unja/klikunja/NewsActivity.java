@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -40,9 +41,9 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
     private LinearLayoutManager layoutManager;
     private List<News> allArticles = new ArrayList<>();
     private Adapter adapter;
-    private Toolbar newsToolbar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SearchView searchView;
+    private ProgressBar paginationProgress;
 
     // Pagination variables
     private int pageNumber = 1;
@@ -55,9 +56,11 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
 
+        Toolbar newsToolbar = findViewById(R.id.news_toolbar);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
-        newsToolbar = findViewById(R.id.news_toolbar);
         recyclerView = findViewById(R.id.recyclerView);
+        paginationProgress = findViewById(R.id.pagination_progress);
+
         layoutManager = new LinearLayoutManager(NewsActivity.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -70,6 +73,14 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         onLoadingSwipeRefresh("");
         initScrollRecycler();
+    }
+
+    private void resetPagination() {
+        pastVisibleItems = 0;
+        visibleItemCount = 0;
+        totalItemCount = 0;
+        previousTotal = 0;
+        pageNumber = 1;
     }
 
     public void loadJson(final String keyword) {
@@ -90,8 +101,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
             public void onResponse(Call<List<News>> call, Response<List<News>> response) {
                 if(response.isSuccessful() && response.body() != null) {
 
-                    List<News> articles = response.body();
-                    allArticles = articles;
+                    allArticles = response.body();
                     adapter = new Adapter(allArticles, NewsActivity.this);
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
@@ -109,73 +119,6 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
 
-    }
-
-    private void initScrollRecycler() {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                visibleItemCount = layoutManager.getChildCount();
-                totalItemCount = layoutManager.getItemCount();
-                pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-
-                if(dy > 0) {
-                    if(isLoading) {
-                        if(totalItemCount > previousTotal) {
-                            isLoading = false;
-                            previousTotal = totalItemCount;
-                        }
-                    }
-
-                    if(!isLoading && (totalItemCount-visibleItemCount) <= pastVisibleItems) {
-                        pageNumber++;
-                        performPagination();
-                        isLoading = true;
-                    }
-                }
-            }
-        });
-    }
-
-    private void performPagination() {
-
-        Toast.makeText(this, "Loading more news...", Toast.LENGTH_SHORT).show();
-
-        swipeRefreshLayout.setRefreshing(true);
-
-        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<News>> call;
-
-        if(!searchView.isIconified()) {
-            call = apiInterface.getPostSearch("193", "", searchView.getQuery().toString(), perPage, pageNumber);
-        }else{
-            call = apiInterface.getPostInfo("193", "", perPage, pageNumber);
-        }
-
-        call.enqueue(new Callback<List<News>>() {
-            @Override
-            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
-                if(response.isSuccessful() && response.body() != null) {
-
-                    List<News> articles = response.body();
-                    allArticles.addAll(articles);
-                    adapter.addItem(articles);
-                    initListener();
-                    swipeRefreshLayout.setRefreshing(false);
-
-                }else{
-                    swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(NewsActivity.this, "No result!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<News>> call, Throwable t) {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
     private void initListener() {
@@ -214,6 +157,73 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
+    private void initScrollRecycler() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+
+                if(dy > 0) {
+                    if(isLoading) {
+                        if(totalItemCount > previousTotal) {
+                            isLoading = false;
+                            previousTotal = totalItemCount;
+                        }
+                    }
+
+                    if(!isLoading && (totalItemCount-visibleItemCount) <= pastVisibleItems) {
+                        pageNumber++;
+                        performPagination();
+                        isLoading = true;
+                    }
+                }
+            }
+        });
+    }
+
+    private void performPagination() {
+        paginationProgress.setVisibility(View.VISIBLE);
+
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<News>> call;
+
+        if(!searchView.isIconified()) {
+            call = apiInterface.getPostSearch("193", "", searchView.getQuery().toString(), perPage, pageNumber);
+        }else{
+            call = apiInterface.getPostInfo("193", "", perPage, pageNumber);
+        }
+
+        call.enqueue(new Callback<List<News>>() {
+            @Override
+            public void onResponse(Call<List<News>> call, Response<List<News>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+
+                    List<News> articles = response.body();
+                    allArticles.addAll(articles);
+                    adapter.addItem(articles);
+                    initListener();
+
+                }else{
+                    Toast.makeText(NewsActivity.this, "No result!", Toast.LENGTH_SHORT).show();
+                }
+
+                paginationProgress.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<News>> call, Throwable t) {
+                Toast.makeText(NewsActivity.this, "No response from the server.", Toast.LENGTH_SHORT).show();
+                paginationProgress.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -249,11 +259,12 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh() {
         searchView.setQuery("", false);
         searchView.setIconified(true);
-        pageNumber = 1;
+        resetPagination();
         loadJson("");
     }
 
     private void onLoadingSwipeRefresh(final String keyword) {
+        resetPagination();
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {

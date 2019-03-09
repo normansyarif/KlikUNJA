@@ -84,6 +84,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
         tempdetails = tempdetails.replace("<p>","");
         tempdetails = tempdetails.replace("</p>","");
         tempdetails = tempdetails.replace("[&hellip;]","");
+        tempdetails = tempdetails.replace("&#8211;","-");
 
         holder.title.setText(model.getTitle().getRendered());
         holder.desc.setText(Utils.splitDesc(tempdetails, 15) + " ...");
