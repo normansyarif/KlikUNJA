@@ -46,6 +46,8 @@ import retrofit2.Response;
 public class OpiniFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View view;
 
+    private final String CATEGORY = "205";
+
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private List<News> allArticles = new ArrayList<>();
@@ -124,9 +126,9 @@ public class OpiniFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         Call<List<News>> call;
 
         if(keyword.length() > 0) {
-            call = apiInterface.getPostSearch("205", "", keyword, PER_PAGE, pageNumber);
+            call = apiInterface.getPostSearch(CATEGORY, "", keyword, PER_PAGE, pageNumber);
         }else{
-            call = apiInterface.getPostInfo("205", "", PER_PAGE, pageNumber);
+            call = apiInterface.getPostInfo(CATEGORY, "", PER_PAGE, pageNumber);
         }
 
         call.enqueue(new Callback<List<News>>() {
@@ -162,15 +164,9 @@ public class OpiniFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
                 News article = allArticles.get(position);
 
-                String tempdetails =  article.getContent().getRendered();
-//                tempdetails = tempdetails.replace("<p>","");
-//                tempdetails = tempdetails.replace("</p>","");
-//                tempdetails = tempdetails.replace("[&hellip;]","");
-//                tempdetails = tempdetails.replace("&#8211;","-");
-
                 intent.putExtra("title", article.getTitle().getRendered());
                 intent.putExtra("author", article.getEmbedded().getAuthor().get(0).getName());
-                intent.putExtra("content", tempdetails);
+                intent.putExtra("content", article.getContent().getRendered());
 
                 startActivity(intent);
             }
@@ -212,9 +208,9 @@ public class OpiniFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         Call<List<News>> call;
 
         if(!searchView.isIconified()) {
-            call = apiInterface.getPostSearch("205", "", searchView.getQuery().toString(), PER_PAGE, pageNumber);
+            call = apiInterface.getPostSearch(CATEGORY, "", searchView.getQuery().toString(), PER_PAGE, pageNumber);
         }else{
-            call = apiInterface.getPostInfo("205", "", PER_PAGE, pageNumber);
+            call = apiInterface.getPostInfo(CATEGORY, "", PER_PAGE, pageNumber);
         }
 
         call.enqueue(new Callback<List<News>>() {
@@ -251,7 +247,7 @@ public class OpiniFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        searchView.setQueryHint("Search news...");
+        searchView.setQueryHint("Search article...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

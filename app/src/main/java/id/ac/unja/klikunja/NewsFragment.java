@@ -46,6 +46,8 @@ import retrofit2.Response;
 public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     View view;
 
+    private final String CATEGORY = "193";
+
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private List<News> allArticles = new ArrayList<>();
@@ -124,9 +126,9 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         Call<List<News>> call;
 
         if(keyword.length() > 0) {
-            call = apiInterface.getPostSearch("193", "", keyword, PER_PAGE, pageNumber);
+            call = apiInterface.getPostSearch(CATEGORY, "", keyword, PER_PAGE, pageNumber);
         }else{
-            call = apiInterface.getPostInfo("193", "", PER_PAGE, pageNumber);
+            call = apiInterface.getPostInfo(CATEGORY, "", PER_PAGE, pageNumber);
         }
 
         call.enqueue(new Callback<List<News>>() {
@@ -164,11 +166,19 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 News article = allArticles.get(position);
 
                 String img;
-                try{
-                    img = article.getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl();
-                }catch (Exception e) {
-                    img = "";
+                try {
+                    img = article.getEmbedded().getWpFeaturedmedia().get(0).getMediaDetails().getSizes()
+                            .getMediumLarge().getSourceUrl();
+                } catch (Exception e) {
+
+                    try{
+                        img = article.getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl();
+                    } catch (Exception f) {
+                        img = "";
+                    }
+
                 }
+
 
                 intent.putExtra("url", article.getLink());
                 intent.putExtra("title", article.getTitle().getRendered());
@@ -225,9 +235,9 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         Call<List<News>> call;
 
         if(!searchView.isIconified()) {
-            call = apiInterface.getPostSearch("193", "", searchView.getQuery().toString(), PER_PAGE, pageNumber);
+            call = apiInterface.getPostSearch(CATEGORY, "", searchView.getQuery().toString(), PER_PAGE, pageNumber);
         }else{
-            call = apiInterface.getPostInfo("193", "", PER_PAGE, pageNumber);
+            call = apiInterface.getPostInfo(CATEGORY, "", PER_PAGE, pageNumber);
         }
 
         call.enqueue(new Callback<List<News>>() {

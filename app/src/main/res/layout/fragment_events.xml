@@ -33,6 +33,7 @@
     <include layout="@layout/error" />
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_marginTop="200dp"
         android:id="@+id/wv_loading"
         android:orientation="vertical"
@@ -40,7 +41,6 @@
         android:layout_height="wrap_content">
 
         <ProgressBar
-            android:visibility="visible"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -55,6 +55,7 @@
     </LinearLayout>
 
     <WebView
+        android:layout_marginBottom="35dp"
         android:visibility="gone"
         android:id="@+id/events_wv"
         android:layout_width="match_parent"

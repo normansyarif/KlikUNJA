@@ -54,11 +54,19 @@ public class OpiniAdapter extends RecyclerView.Adapter<OpiniAdapter.MyViewHolder
         requestOptions.centerCrop();
 
         String img;
-        try{
-            img = model.getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl();
-        }catch (Exception e) {
-            img = "";
+        try {
+            img = model.getEmbedded().getWpFeaturedmedia().get(0).getMediaDetails().getSizes()
+                    .getMediumLarge().getSourceUrl();
+        } catch (Exception e) {
+
+            try{
+                img = model.getEmbedded().getWpFeaturedmedia().get(0).getSourceUrl();
+            } catch (Exception f) {
+                img = "";
+            }
+
         }
+
 
         Glide.with(context)
                 .load(img)
