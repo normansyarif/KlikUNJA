@@ -19,14 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BrowserActivity"></activity>
-        <activity android:name=".NewsDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
-
-
-
-        </activity>
+        <activity android:name=".BrowserActivity" />
+        <activity
+            android:name=".NewsDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".OpiniDetailActivity"></activity>
     </application>
 
 </manifest>

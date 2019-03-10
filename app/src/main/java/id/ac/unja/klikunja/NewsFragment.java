@@ -49,7 +49,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private RecyclerView recyclerView;
     private LinearLayoutManager layoutManager;
     private List<News> allArticles = new ArrayList<>();
-    private Adapter adapter;
+    private NewsAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private SearchView searchView;
     private ProgressBar paginationProgress;
@@ -135,7 +135,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 if(response.isSuccessful() && response.body() != null) {
 
                     allArticles = response.body();
-                    adapter = new Adapter(allArticles, getActivity());
+                    adapter = new NewsAdapter(allArticles, getActivity());
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     initListener();
@@ -155,7 +155,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initListener() {
-        adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 ImageView imageView = view.findViewById(R.id.img);

@@ -25,13 +25,13 @@ import java.util.List;
 
 import id.ac.unja.klikunja.models.News;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
+public class OpiniAdapter extends RecyclerView.Adapter<OpiniAdapter.MyViewHolder>{
     private List<News> articles;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
 
-    public Adapter(List<News> articles, Context context) {
+    OpiniAdapter(List<News> articles, Context context) {
         this.articles = articles;
         this.context = context;
     }
@@ -39,7 +39,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.news_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.opini_item, parent, false);
         return new MyViewHolder(view, onItemClickListener);
     }
 
@@ -49,8 +49,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
         News model = articles.get(position);
 
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(Utils.getRandomDrawbleColor());
-        requestOptions.error(Utils.getRandomDrawbleColor());
+        requestOptions.error(R.drawable.ic_person);
         requestOptions.diskCacheStrategy(DiskCacheStrategy.ALL);
         requestOptions.centerCrop();
 
@@ -67,31 +66,21 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        holder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        holder.progressBar.setVisibility(View.GONE);
                         return false;
                     }
                 })
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.imageView);
 
-        String tempdetails =  model.getExcerpt().getRendered();
-        tempdetails = tempdetails.replace("<p>","");
-        tempdetails = tempdetails.replace("</p>","");
-        tempdetails = tempdetails.replace("[&hellip;]","");
-        tempdetails = tempdetails.replace("&#8211;","-");
-
         holder.title.setText(model.getTitle().getRendered());
-        holder.desc.setText(Utils.splitDesc(tempdetails, 15) + " ...");
         holder.source.setText(model.getEmbedded().getAuthor().get(0).getName());
-        holder.time.setText(" \u2022 " + Utils.DateToTimeFormat(model.getDate()));
+        holder.time.setText(Utils.DateToTimeFormat(model.getDate()));
         holder.published_at.setText(Utils.DateFormat(model.getDate()));
-        holder.author.setText("");
 
     }
 
@@ -110,9 +99,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener {
 
-        TextView title, desc, author, published_at, source, time;
+        TextView title, author, published_at, source, time;
         ImageView imageView;
-        ProgressBar progressBar;
         OnItemClickListener onItemClickListener;
 
         public MyViewHolder(View itemView, OnItemClickListener onItemClickListener) {
@@ -121,13 +109,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder>{
 
             itemView.setOnClickListener(this);
             title = itemView.findViewById(R.id.title);
-            desc = itemView.findViewById(R.id.desc);
             author = itemView.findViewById(R.id.author);
             published_at = itemView.findViewById(R.id.publishedAt);
             source = itemView.findViewById(R.id.source);
             time = itemView.findViewById(R.id.time);
             imageView = itemView.findViewById(R.id.img);
-            progressBar = itemView.findViewById(R.id.prograss_load_photo);
 
             this.onItemClickListener = onItemClickListener;
 
