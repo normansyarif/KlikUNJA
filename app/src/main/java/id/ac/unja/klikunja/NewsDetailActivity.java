@@ -38,8 +38,6 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
     private String mUrl, mImg, mTitle, mDate,mAuthor;
     private ProgressBar progressBar;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,9 +130,21 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
                         "document.getElementsByClassName('post-trait-w')[0].style.display='none'; " +
                         "document.getElementsByClassName('au-avatar-box')[0].style.display='none'; " +
                         "document.getElementsByClassName('postmetadata')[0].style.display='none'; " +
+                        "})()");
+
+                webView.loadUrl("javascript:(function() { " +
                         "document.getElementById('header').style.display='none'; " +
+                        "})()");
+
+                webView.loadUrl("javascript:(function() { " +
                         "document.getElementById('headline').style.display='none'; " +
+                        "})()");
+
+                webView.loadUrl("javascript:(function() { " +
                         "document.getElementById('pre-footer').style.display='none'; " +
+                        "})()");
+
+                webView.loadUrl("javascript:(function() { " +
                         "document.getElementById('footer').style.display='none'; " +
                         "})()");
 
