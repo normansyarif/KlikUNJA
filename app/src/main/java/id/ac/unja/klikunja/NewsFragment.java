@@ -20,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -141,15 +142,27 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     initListener();
-                    swipeRefreshLayout.setRefreshing(false);
+
+                    if(String.valueOf(response.body()).equals("[]")) {
+                        showNotFoundMessage(
+                                R.drawable.no_result,
+                                "I wish there was something, but there's not",
+                                "We couldn't find what you're looking for. Sorry :(");
+                    }
+
                 }else{
-                    swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getActivity(), "No result!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No response from server", Toast.LENGTH_SHORT).show();
                 }
+
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<List<News>> call, Throwable t) {
+                showErrorMessage(
+                        R.drawable.oops,
+                        "Oops",
+                        "It looks like you're offline.");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -249,8 +262,6 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     adapter.addItem(articles);
                     initListener();
 
-                }else{
-                    Toast.makeText(getActivity(), "No result!", Toast.LENGTH_SHORT).show();
                 }
 
                 paginationProgress.setVisibility(View.INVISIBLE);
@@ -259,8 +270,8 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
             @Override
             public void onFailure(Call<List<News>> call, Throwable t) {
-                Toast.makeText(getActivity(), "No response from the server.", Toast.LENGTH_SHORT).show();
                 paginationProgress.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(), "You're offline. Check your connection.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -280,6 +291,11 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             public boolean onQueryTextSubmit(String query) {
                 if(query.length() > 2) {
                     resetPagination();
+
+                    if(errorLayout.getVisibility() == View.VISIBLE) {
+                        errorLayout.setVisibility(View.GONE);
+                    }
+
                     onLoadingSwipeRefresh(query);
                 }else{
                     Toast.makeText(getActivity(), "Type more that 2 letters", Toast.LENGTH_SHORT).show();
@@ -309,6 +325,7 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private void showErrorMessage(int imageView, String title, String message) {
         if(errorLayout.getVisibility() == View.GONE) {
             errorLayout.setVisibility(View.VISIBLE);
+            btnRetry.setVisibility(View.VISIBLE);
         }
 
         errorImage.setImageResource(imageView);
@@ -321,6 +338,17 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 initContent();
             }
         });
+    }
+
+    private void showNotFoundMessage(int imageView, String title, String message) {
+        if(errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+            btnRetry.setVisibility(View.GONE);
+        }
+
+        errorImage.setImageResource(imageView);
+        errorTitle.setText(title);
+        errorMessage.setText(message);
     }
 
     private boolean isNetworkAvailable() {
