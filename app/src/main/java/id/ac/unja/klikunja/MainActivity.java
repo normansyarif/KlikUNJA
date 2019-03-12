@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.opini_menu:
                 fragment = new OpiniFragment();
                 break;
+            case R.id.email_menu:
+                fragment = new MessageFragment();
+                break;
         }
         return loadFragment(fragment);
     }

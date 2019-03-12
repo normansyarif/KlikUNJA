@@ -22,5 +22,10 @@
         android:title="@string/events"
         android:icon="@drawable/ic_events_bnv"/>
 
+    <item
+        android:id="@+id/email_menu"
+        android:title="@string/contact"
+        android:icon="@drawable/ic_email_bnv"/>
+
 
 </menu>

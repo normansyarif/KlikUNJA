@@ -22,8 +22,8 @@
         <activity android:name=".BrowserActivity" />
         <activity
             android:name=".NewsDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".OpiniDetailActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".OpiniDetailActivity" />
     </application>
 
 </manifest>
