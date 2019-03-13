@@ -55,7 +55,7 @@
             android:rowCount="3">
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_survey"
+                android:id="@+id/card_news"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -80,13 +80,13 @@
                     <ImageView
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:src="@drawable/home_survey" />
+                        android:src="@drawable/home_news" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Survey"
+                        android:text="Berita"
                         android:textColor="#6f6f6f"
                         android:textSize="15sp" />
 
@@ -95,7 +95,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_repo"
+                android:id="@+id/card_opini"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -120,13 +120,13 @@
                     <ImageView
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:src="@drawable/home_repo" />
+                        android:src="@drawable/home_bubble" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Repository"
+                        android:text="Opini"
                         android:textColor="#6f6f6f"
                         android:textSize="15sp" />
 
@@ -135,7 +135,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_simpeg"
+                android:id="@+id/card_notices"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -160,13 +160,13 @@
                     <ImageView
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:src="@drawable/home_simpeg" />
+                        android:src="@drawable/home_info" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="SIMPEG"
+                        android:text="Informasi"
                         android:textColor="#6f6f6f"
                         android:textSize="15sp" />
 
@@ -175,7 +175,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_borang"
+                android:id="@+id/card_events"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -200,13 +200,13 @@
                     <ImageView
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:src="@drawable/home_borang" />
+                        android:src="@drawable/home_event" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Borang"
+                        android:text="Event"
                         android:textColor="#6f6f6f"
                         android:textSize="15sp" />
 
@@ -215,7 +215,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_dss"
+                android:id="@+id/card_contact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -240,53 +240,13 @@
                     <ImageView
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:src="@drawable/home_dss" />
+                        android:src="@drawable/home_contact" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="DSS"
-                        android:textColor="#6f6f6f"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_journal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="35dp"
-                android:layout_marginTop="10dp"
-                android:layout_rowWeight="1"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="6dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
-                        android:src="@drawable/home_journal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Journal"
+                        android:text="Kontak"
                         android:textColor="#6f6f6f"
                         android:textSize="15sp" />
 

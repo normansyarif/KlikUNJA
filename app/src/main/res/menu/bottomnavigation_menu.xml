@@ -8,24 +8,18 @@
         android:icon="@drawable/ic_home_bnv"/>
 
     <item
-        android:id="@+id/search_menu"
-        android:title="@string/search"
-        android:icon="@drawable/ic_news_bnv"/>
+        android:id="@+id/repo_menu"
+        android:title="@string/repo"
+        android:icon="@drawable/ic_cloud_bnv"/>
 
     <item
-        android:id="@+id/opini_menu"
-        android:title="@string/opini"
-        android:icon="@drawable/ic_opini_bnv"/>
+        android:id="@+id/simpeg_menu"
+        android:title="@string/simpeg"
+        android:icon="@drawable/ic_people_bnv"/>
 
     <item
-        android:id="@+id/events_menu"
-        android:title="@string/events"
-        android:icon="@drawable/ic_events_bnv"/>
-
-    <item
-        android:id="@+id/email_menu"
-        android:title="@string/contact"
-        android:icon="@drawable/ic_email_bnv"/>
-
+        android:id="@+id/dss_menu"
+        android:title="@string/dss"
+        android:icon="@drawable/ic_trending_bnv"/>
 
 </menu>

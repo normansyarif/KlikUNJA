@@ -15,8 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    public static final String BASE_URL = "http://www.unja.ac.id/wp-json/wp/v2/";
-    public static Retrofit retrofit;
+    private static final String BASE_URL = "http://www.unja.ac.id/wp-json/wp/v2/";
+    private static Retrofit retrofit;
 
     public static Retrofit getApiClient(){
 
@@ -32,7 +32,7 @@ public class ApiClient {
         return retrofit;
     }
 
-    public static OkHttpClient.Builder getUnsafeOkHttpClient(){
+    private static OkHttpClient.Builder getUnsafeOkHttpClient(){
         try {
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustAllCerts = new TrustManager[]{

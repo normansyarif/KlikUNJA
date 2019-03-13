@@ -47,17 +47,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.home_menu:
                 fragment = new HomeFragment();
                 break;
-            case R.id.search_menu:
-                fragment = new NewsFragment();
+            case R.id.repo_menu:
+                fragment = BrowserFragment.newInstance("repo");
                 break;
-            case R.id.events_menu:
-                fragment = new EventsFragment();
+            case R.id.simpeg_menu:
+                fragment = BrowserFragment.newInstance("simpeg");
                 break;
-            case R.id.opini_menu:
-                fragment = new OpiniFragment();
-                break;
-            case R.id.email_menu:
-                fragment = new MessageFragment();
+            case R.id.dss_menu:
+                fragment = BrowserFragment.newInstance("dss");
                 break;
         }
         return loadFragment(fragment);
@@ -71,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press back again to leave", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Tekan sekali lagi untuk keluar", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 

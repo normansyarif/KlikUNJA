@@ -2,8 +2,7 @@
     <string name="app_name">KlikUNJA</string>
 
     <string name="home">Home</string>
-    <string name="search">News</string>
-    <string name="events">Events</string>
-    <string name="opini">Opini</string>
-    <string name="contact">Contact</string>
+    <string name="repo">Repository</string>
+    <string name="simpeg">SIMPEG</string>
+    <string name="dss">DSS</string>
 </resources>

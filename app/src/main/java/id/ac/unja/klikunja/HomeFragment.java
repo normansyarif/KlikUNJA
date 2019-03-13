@@ -23,60 +23,53 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         View view = getView();
-        CardView card_survey = view.findViewById(R.id.card_survey);
-        CardView card_repo = view.findViewById(R.id.card_repo);
-        CardView card_borang = view.findViewById(R.id.card_borang);
-        CardView card_simpeg = view.findViewById(R.id.card_simpeg);
-        CardView card_dss = view.findViewById(R.id.card_dss);
-        CardView card_journal = view.findViewById(R.id.card_journal);
 
-        card_survey.setOnClickListener(new View.OnClickListener() {
+        CardView cardNews = view.findViewById(R.id.card_news);
+        CardView cardOpini = view.findViewById(R.id.card_opini);
+        CardView cardNotices = view.findViewById(R.id.card_notices);
+        CardView cardEvents = view.findViewById(R.id.card_events);
+        CardView cardContact = view.findViewById(R.id.card_contact);
+
+
+        cardNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser("survey");
+                openActivity(NewsActivity.class);
             }
         });
 
-        card_repo.setOnClickListener(new View.OnClickListener() {
+        cardOpini.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser("repo");
+                openActivity(OpiniActivity.class);
             }
         });
 
-        card_borang.setOnClickListener(new View.OnClickListener() {
+        cardNotices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser("borang");
+                openActivity(NoticesActivity.class);
             }
         });
 
-        card_simpeg.setOnClickListener(new View.OnClickListener() {
+        cardEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser("simpeg");
+                openActivity(EventsActivity.class);
             }
         });
 
-        card_dss.setOnClickListener(new View.OnClickListener() {
+        cardContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openBrowser("dss");
-            }
-        });
-
-        card_journal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openBrowser("journal");
+                openActivity(ContactActivity.class);
             }
         });
 
     }
 
-    private void openBrowser(String category) {
-        Intent intent = new Intent(getActivity(), BrowserActivity.class);
-        intent.putExtra("category", category);
+    private void openActivity(Class<?> cls) {
+        Intent intent = new Intent(getActivity(), cls);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
