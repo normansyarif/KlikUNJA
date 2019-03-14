@@ -29,6 +29,7 @@ public class HomeFragment extends Fragment {
         CardView cardNotices = view.findViewById(R.id.card_notices);
         CardView cardEvents = view.findViewById(R.id.card_events);
         CardView cardContact = view.findViewById(R.id.card_contact);
+        CardView cardSiakad = view.findViewById(R.id.card_siakad);
 
 
         cardNews.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +64,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 openActivity(ContactActivity.class);
+            }
+        });
+
+        cardSiakad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(SiakadActivity.class);
             }
         });
 

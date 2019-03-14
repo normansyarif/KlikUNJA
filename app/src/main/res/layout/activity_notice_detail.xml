@@ -93,7 +93,8 @@
                         android:id="@+id/notice_no_inet"
                         android:visibility="gone"
                         android:textAlignment="center"
-                        android:layout_marginTop="120dp"
+                        android:paddingTop="25dp"
+                        android:paddingBottom="33dp"
                         android:text="We need the Internet to load the content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

@@ -52,6 +52,7 @@ public class NoticeDetailActivity extends AppCompatActivity {
         if (isNetworkAvailable()) {
             initWebView(url);
         } else {
+            mProgress.setVisibility(View.GONE);
             noInet.setVisibility(View.VISIBLE);
         }
     }

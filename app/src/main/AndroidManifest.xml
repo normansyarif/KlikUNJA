@@ -28,7 +28,8 @@
         <activity android:name=".EventsActivity" />
         <activity android:name=".ContactActivity" />
         <activity android:name=".NoticesActivity" />
-        <activity android:name=".NoticeDetailActivity"></activity>
+        <activity android:name=".NoticeDetailActivity" />
+        <activity android:name=".SiakadActivity"></activity>
     </application>
 
 </manifest>

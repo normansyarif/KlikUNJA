@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="id.ac.unja.klikunja.OpiniDetailActivity">
+    tools:context=".OpiniDetailActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/opini_toolbar"
@@ -16,44 +16,86 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
-        android:scrollbarStyle="insideOverlay"
+    <android.support.v4.widget.NestedScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:background="@color/colorBackground"
+        android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
-            android:padding="11dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:textStyle="bold"
-                android:layout_marginBottom="5dp"
-                android:textSize="20sp"
-                android:text="Title"
-                android:id="@+id/opini_title"
+            <android.support.v7.widget.CardView
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                app:cardCornerRadius="0dp"
+                app:cardElevation="@dimen/cardview_default_elevation"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="20dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/opini_title"
+                        android:textColor="@color/colorTextTitle"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="19sp"
+                        android:text="Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
 
-            <TextView
-                android:textStyle="italic"
-                android:layout_marginBottom="15dp"
-                android:textSize="13sp"
-                android:text="Author"
-                android:id="@+id/opini_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                    <TextView
+                        android:textStyle="italic"
+                        android:id="@+id/opini_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_below="@id/opini_title"
+                        android:layout_marginTop="10dp"
+                        android:maxLines="1"
+                        android:drawablePadding="10dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:text="Author" />
 
-            <TextView
-                android:lineSpacingExtra="6dp"
-                android:text="Content"
-                android:id="@+id/opini_body"
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/cardview_default_elevation"
+                app:cardCornerRadius="0dp">
+
+                <RelativeLayout
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:lineSpacingExtra="6dp"
+                        android:text="Content"
+                        android:id="@+id/opini_body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>
