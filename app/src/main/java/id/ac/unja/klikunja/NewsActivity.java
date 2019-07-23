@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -135,7 +136,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
                     if(String.valueOf(response.body()).equals("[]")) {
                         showNotFoundMessage(
                                 R.drawable.no_result,
-                                "I wish there was something, but there's not",
+                                "Pencarian tidak ditemukan",
                                 "We couldn't find what you're looking for. Sorry :(");
                     }
 
@@ -148,6 +149,7 @@ public class NewsActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public void onFailure(Call<List<News>> call, Throwable t) {
+                Log.d("mencoba", t.toString());
                 showErrorMessage(
                         R.drawable.oops,
                         "Oops",

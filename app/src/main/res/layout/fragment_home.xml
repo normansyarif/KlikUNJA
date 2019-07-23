@@ -13,6 +13,7 @@
 
         <RelativeLayout
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
@@ -21,18 +22,18 @@
             <TextView
                 android:id="@+id/txtAppname"
                 android:layout_width="wrap_content"
-                android:text="@string/app_name"
+                android:text="Media Informasi"
                 android:textSize="22sp"
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="5dp"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="2dp"
                 android:layout_below="@+id/txtAppname"
-                android:text="Menu"
-                android:textSize="14sp"
-                android:textColor="#ffeabd"
+                android:text="Universitas Jambi"
+                android:textSize="17sp"
+                android:textColor="#fff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -43,8 +44,6 @@
                 android:layout_height="62dp" />
 
         </RelativeLayout>
-
-        0
 
         <GridLayout
             android:layout_width="match_parent"
@@ -289,6 +288,63 @@
                         android:text="Kontak"
                         android:textColor="#6f6f6f"
                         android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="1"
+            android:columnOrderPreserved="false"
+            android:rowCount="1">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/visi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_rowWeight="1"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/visi_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="VISI"
+                        android:textColor="#ff840b"
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:id="@+id/visi_content_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:paddingBottom="10dp"
+                        android:text="A World Class Enterpreneurship University"
+                        android:textAlignment="center"
+                        android:textColor="#ff840b"
+                        android:textSize="23sp" />
 
                 </LinearLayout>
 

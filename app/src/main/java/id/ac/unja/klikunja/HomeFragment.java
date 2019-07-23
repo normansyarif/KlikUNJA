@@ -1,6 +1,7 @@
 package id.ac.unja.klikunja;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class HomeFragment extends Fragment {
 
@@ -24,6 +26,9 @@ public class HomeFragment extends Fragment {
 
         View view = getView();
 
+        TextView visi_txt = view.findViewById(R.id.visi_txt);
+        TextView visi_content_txt = view.findViewById(R.id.visi_content_txt);
+
         CardView cardNews = view.findViewById(R.id.card_news);
         CardView cardOpini = view.findViewById(R.id.card_opini);
         CardView cardNotices = view.findViewById(R.id.card_notices);
@@ -31,6 +36,9 @@ public class HomeFragment extends Fragment {
         CardView cardContact = view.findViewById(R.id.card_contact);
         CardView cardSiakad = view.findViewById(R.id.card_siakad);
 
+        Typeface face = Typeface.createFromAsset(getActivity().getAssets(), "ds.ttf");
+        visi_txt.setTypeface(face);
+        visi_content_txt.setTypeface(face);
 
         cardNews.setOnClickListener(new View.OnClickListener() {
             @Override
